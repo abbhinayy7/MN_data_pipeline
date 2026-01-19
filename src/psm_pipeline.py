@@ -124,7 +124,7 @@ def deduplicate_by_psm(merged):
     cols = merged.columns.tolist()
     acc_col = find_best_column(cols, ["accession", "accessions", "protein accession", "protein id", "id"])
     desc_col = find_best_column(cols, ["description", "protein name", "protein description", "names"])
-    psm_col = find_best_column(cols, ["psm", "psms", "peptide spectrum matches", "psm count", "peptide count"])
+    psm_col = find_best_column(cols, ["psm", "psms", "peptide spectrum matches", "psm count", "peptide count", "num. of matches", "num of matches", "number of matches"])
 
     if acc_col is None:
         logging.error("No accession column detected in merged data.")
@@ -190,7 +190,7 @@ def create_wide_mapping(master, files):
                     continue
                 df = df.rename(columns={acc_col_local: "accession"})
                 df["accession"] = df["accession"].astype(str).str.strip()
-                psm_local = find_best_column(df.columns, ["psm", "psms", "peptide spectrum matches", "psm count", "peptide count"])
+                psm_local = find_best_column(df.columns, ["psm", "psms", "peptide spectrum matches", "psm count", "peptide count", "num. of matches", "num of matches", "number of matches"])
                 clean_sheet = simplify_sheet_name(sheetname)
                 psm_colname = f"{clean_sheet}_psm"
                 if psm_colname not in sample_psm_cols:
@@ -209,7 +209,7 @@ def create_wide_mapping(master, files):
                 continue
             df = df.rename(columns={acc_col_local: "accession"})
             df["accession"] = df["accession"].astype(str).str.strip()
-            psm_local = find_best_column(df.columns, ["psm", "psms", "peptide spectrum matches", "psm count", "peptide count"])
+            psm_local = find_best_column(df.columns, ["psm", "psms", "peptide spectrum matches", "psm count", "peptide count", "num. of matches", "num of matches", "number of matches"])
             psm_colname = "CSV_psm"
             if psm_colname not in sample_psm_cols:
                 sample_psm_cols.append(psm_colname)
@@ -220,7 +220,7 @@ def create_wide_mapping(master, files):
                 out_wide[psm_colname] = 0
 
     # Rename key columns
-    rename_dict = {"accession": "Accession", "description": "Description", "psm": "PSM"}
+    rename_dict = {"accession": "Accession", "description": "Description", "psm": "PSMs"}
     out_wide = out_wide.rename(columns={k: v for k, v in rename_dict.items() if k in out_wide.columns})
 
     # Clean Description
@@ -237,7 +237,7 @@ def create_wide_mapping(master, files):
 
     # Reorder columns
     cols_order = []
-    for key in ["Accession", "Description", "PSM"]:
+    for key in ["Accession", "Description", "PSMs"]:
         if key in out_wide.columns:
             cols_order.append(key)
     cols_order += ["Count_in_samples"]
@@ -249,7 +249,7 @@ def create_wide_mapping(master, files):
 def create_long_mapping(merged, master, dedup):
     """Create long mapping and summary."""
     merged_for_map = merged.copy()
-    psm_col_map = find_best_column(merged_for_map.columns, ["psm", "psms", "peptide spectrum matches", "psm count", "peptide count"])
+    psm_col_map = find_best_column(merged_for_map.columns, ["psm", "psms", "peptide spectrum matches", "psm count", "peptide count", "num. of matches", "num of matches", "number of matches"])
     if psm_col_map and psm_col_map != "psm_in_sheet":
         merged_for_map = merged_for_map.rename(columns={psm_col_map: "psm_in_sheet"})
     elif "psm" in merged_for_map.columns:
@@ -288,8 +288,8 @@ def create_long_mapping(merged, master, dedup):
 def visualize(out_wide, sample_psm_cols, top_n, heatmap_png, bar_png):
     """Create visualizations."""
     # Heatmap top N
-    if "PSM" in out_wide.columns:
-        top_accessions = out_wide.sort_values("PSM", ascending=False).head(top_n)["Accession"]
+    if "PSMs" in out_wide.columns:
+        top_accessions = out_wide.sort_values("PSMs", ascending=False).head(top_n)["Accession"]
     else:
         top_accessions = out_wide.head(top_n)["Accession"]
 
@@ -298,7 +298,7 @@ def visualize(out_wide, sample_psm_cols, top_n, heatmap_png, bar_png):
 
     plt.figure(figsize=(10, 8))
     plt.imshow(heatmap_data.values, aspect='auto', cmap='viridis')
-    plt.colorbar(label='PSM')
+    plt.colorbar(label='PSMs')
     plt.xticks(range(len(sample_psm_cols)), sample_psm_cols, rotation=90)
     plt.yticks(range(len(heatmap_data)), heatmap_data.index)
     plt.title(f'Heatmap of Top {top_n} Accessions PSMs')
@@ -312,7 +312,7 @@ def visualize(out_wide, sample_psm_cols, top_n, heatmap_png, bar_png):
     plt.figure(figsize=(10, 6))
     sums.plot(kind='bar')
     plt.title('Sum of PSMs per Sample')
-    plt.ylabel('Total PSM')
+    plt.ylabel('Total PSMs')
     plt.xticks(rotation=45)
     plt.tight_layout()
     plt.savefig(bar_png)
