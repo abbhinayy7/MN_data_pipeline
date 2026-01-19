@@ -1,11 +1,15 @@
 # Outputs
 merged_all_rows.xlsx
 merged_unique_by_score.xlsx
+merged_unique_by_psm.xlsx
 final_two_sheets.xlsx
 final_master_with_sheet_mapping.xlsx
 accession_sheet_score_map.xlsx
+accession_sheet_psm_map.xlsx
 heatmap_score_top50.png
+heatmap_psm_top50.png
 score_sum_per_sample.png
+psm_sum_per_sample.png
 
 # Python
 __pycache__/
