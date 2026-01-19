@@ -27,7 +27,7 @@ Processes Mascot scores.
 - `score_sum_per_sample.png`: Bar plot of score sums per sample
 
 ### PSM Pipeline (`src/psm_pipeline.py`)
-Processes PSM counts.
+Processes PSM counts. Recognizes columns like "psm", "psms", "peptide spectrum matches", "psm count", "peptide count", "num. of matches", etc.
 
 **Features:**
 - Merge Excel/CSV files (all sheets)
