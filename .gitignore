@@ -1,0 +1,36 @@
+# Outputs
+merged_all_rows.xlsx
+merged_unique_by_score.xlsx
+final_two_sheets.xlsx
+final_master_with_sheet_mapping.xlsx
+accession_sheet_score_map.xlsx
+heatmap_score_top50.png
+score_sum_per_sample.png
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.git
+.mypy_cache
+.pytest_cache
+.hypothesis
+
+# OS
+.DS_Store
+Thumbs.db
